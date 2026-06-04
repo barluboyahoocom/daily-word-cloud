@@ -32,6 +32,34 @@ const answerBox = document.getElementById("answerBox");
 const results = document.getElementById("results");
 const totalReactions = document.getElementById("totalReactions");
 const unlockText = document.getElementById("unlockText");
+const langEn = document.getElementById("langEn");
+const langHe = document.getElementById("langHe");
+const mainTitle = document.getElementById("mainTitle");
+const questionTitle = document.getElementById("questionTitle");
+
+let currentLanguage = localStorage.getItem("language") || "en";
+
+function applyLanguage() {
+  if (currentLanguage === "he") {
+    document.documentElement.lang = "he";
+    document.body.dir = "rtl";
+
+    mainTitle.innerText = "ענן מילים יומי";
+    questionTitle.innerText = "התחממות גלובלית";
+    unlockText.innerText = hasAnswered ? "התרשים נפתח" : "תגיב כדי לפתוח את התרשים";
+    wordInput.placeholder = "כתוב את המחשבה הראשונה שלך...";
+    submitBtn.innerText = "שלח";
+  } else {
+    document.documentElement.lang = "en";
+    document.body.dir = "ltr";
+
+    mainTitle.innerText = "Daily Word Cloud";
+    questionTitle.innerText = "Global Warming";
+    unlockText.innerText = hasAnswered ? "Chart unlocked" : "React to unlock the chart";
+    wordInput.placeholder = "Enter your first thought...";
+    submitBtn.innerText = "Submit";
+  }
+}
 
 const today = new Date().toISOString().slice(0, 10);
 let hasAnswered = localStorage.getItem(`answered-${today}`) === "true";
