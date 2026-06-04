@@ -120,3 +120,16 @@ unicode-bidi: isolate;
 #answerBox {
 margin-top: 20px;
 }
+
+.languageSwitcher {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.languageSwitcher button {
+    margin-top: 0;
+    padding: 8px 14px;
+    font-size: 14px;
+}
