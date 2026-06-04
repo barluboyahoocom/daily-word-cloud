@@ -1,16 +1,14 @@
-const submitBtn = document.getElementById("submitBtn");
-const wordInput = document.getElementById("wordInput");
-const message = document.getElementById("message");
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 
-submitBtn.addEventListener("click", () => {
+const firebaseConfig = {
+  apiKey: "AIzaSyCICTIdyskpbyUkeEyxBEmKUbC4fh1fhA8",
+  authDomain: "daily-word-cloud.firebaseapp.com",
+  projectId: "daily-word-cloud",
+  storageBucket: "daily-word-cloud.firebasestorage.app",
+  messagingSenderId: "852550846522",
+  appId: "1:852550846522:web:1c9baff2def6fbce968d03"
+};
 
-    const word = wordInput.value.trim();
+const app = initializeApp(firebaseConfig);
 
-    if (!word) {
-        message.innerText = "Please enter a word";
-        return;
-    }
-
-    message.innerText = `You entered: ${word}`;
-
-});
+console.log("Firebase Connected!");
