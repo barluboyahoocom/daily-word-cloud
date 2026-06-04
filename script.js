@@ -29,8 +29,18 @@ const message = document.getElementById("message");
 const wordCloud = document.getElementById("wordCloud");
 const wordStats = document.getElementById("wordStats");
 const answerBox = document.getElementById("answerBox");
+const results = document.getElementById("results");
+const totalReactions = document.getElementById("totalReactions");
+const unlockText = document.getElementById("unlockText");
 
 const today = new Date().toISOString().slice(0, 10);
+let hasAnswered = localStorage.getItem(`answered-${today}`) === "true";
+
+if (hasAnswered) {
+  answerBox.style.display = "none";
+  unlockText.innerText = "Chart unlocked";
+  results.style.display = "block";
+}
 
 submitBtn.addEventListener("click", async () => {
   const word = wordInput.value.trim().toLowerCase();
@@ -59,8 +69,13 @@ submitBtn.addEventListener("click", async () => {
       });
     }
 
+    localStorage.setItem(`answered-${today}`, "true");
+    hasAnswered = true;
+
     answerBox.style.display = "none";
     message.innerText = "";
+    unlockText.innerText = "Chart unlocked";
+    results.style.display = "block";
   } catch (error) {
     console.error(error);
     message.innerText = "Error saving word";
@@ -79,10 +94,19 @@ onSnapshot(wordsRef, (snapshot) => {
   wordStats.innerHTML = "";
 
   const words = [];
+  let total = 0;
 
   snapshot.forEach((docSnap) => {
-    words.push(docSnap.data());
+    const data = docSnap.data();
+    words.push(data);
+    total += data.count || 0;
   });
+
+  totalReactions.innerText = `Today people already reacted: ${total}`;
+
+  if (!hasAnswered) {
+    return;
+  }
 
   words.sort((a, b) => b.count - a.count);
 
