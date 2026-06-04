@@ -123,7 +123,9 @@ onSnapshot(wordsRef, (snapshot) => {
 
     const row = document.createElement("div");
     row.className = "stat-row";
-    row.innerText = `${data.word}: ${data.count}`;
+    row.innerHTML = `
+    <span dir="auto">${data.word}</span>: ${data.count}
+    `;
     wordStats.appendChild(row);
   });
 });
