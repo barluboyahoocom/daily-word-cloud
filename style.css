@@ -39,3 +39,17 @@ button {
     margin-top: 20px;
     font-weight: bold;
 }
+
+#wordCloud {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+.word-item {
+    font-weight: bold;
+    padding: 6px;
+}
