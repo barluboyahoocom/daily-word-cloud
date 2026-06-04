@@ -99,3 +99,14 @@ button {
 .stat-row {
     margin-bottom: 8px;
 }
+
+.stat-row {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.word-name {
+    direction: auto;
+}
