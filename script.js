@@ -30,6 +30,7 @@ let hasAnswered = localStorage.getItem(`answered-${today}`) === "true";
 
 let currentQuestionHe = "";
 let currentQuestionEn = "";
+let currentTotal = 0;
 
 const submitBtn = document.getElementById("submitBtn");
 const wordInput = document.getElementById("wordInput");
@@ -56,38 +57,49 @@ function setUnlockState() {
   }
 }
 
-function applyLanguage(total = null) {
+function applyLanguage() {
+
   questionTitle.innerText =
-    currentLanguage === "he" ? currentQuestionHe : currentQuestionEn;
+    currentLanguage === "he"
+      ? currentQuestionHe
+      : currentQuestionEn;
 
   if (currentLanguage === "he") {
+
     document.documentElement.lang = "he";
     document.body.dir = "rtl";
 
     mainTitle.innerText = "ענן מילים יומי";
     dailyTopicLabel.innerText = "הנושא היומי: ";
-    unlockText.innerText = hasAnswered ? "התרשים נפתח" : "תגיב כדי לפתוח את התרשים";
+    unlockText.innerText = hasAnswered
+      ? "התרשים נפתח"
+      : "תגיב כדי לפתוח את התרשים";
+
     wordInput.placeholder = "כתוב את המחשבה הראשונה שלך...";
     submitBtn.innerText = "שלח";
     message.innerText = "";
 
-    if (total !== null) {
-      totalReactions.innerText = `היום הגיבו כבר: ${total} אנשים`;
-    }
+    totalReactions.innerText =
+      `היום הגיבו כבר: ${currentTotal} אנשים`;
+
   } else {
+
     document.documentElement.lang = "en";
     document.body.dir = "ltr";
 
     mainTitle.innerText = "Daily Word Cloud";
     dailyTopicLabel.innerText = "Today's Topic: ";
-    unlockText.innerText = hasAnswered ? "Chart unlocked" : "React to unlock the chart";
+    unlockText.innerText = hasAnswered
+      ? "Chart unlocked"
+      : "React to unlock the chart";
+
     wordInput.placeholder = "Enter your first thought...";
     submitBtn.innerText = "Submit";
     message.innerText = "";
 
-    if (total !== null) {
-      totalReactions.innerText = `Today people already reacted: ${total}`;
-    }
+    totalReactions.innerText =
+      `Today people already reacted: ${currentTotal}`;
+
   }
 }
 
@@ -178,7 +190,8 @@ onSnapshot(wordsRef, (snapshot) => {
     total += data.count || 0;
   });
 
-  applyLanguage(total);
+  currentTotal = total;
+  applyLanguage();
 
   if (!hasAnswered) {
     return;
