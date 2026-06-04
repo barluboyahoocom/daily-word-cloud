@@ -1,112 +1,122 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+font-family: Arial, sans-serif;
+background-color: #f4f4f4;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+margin: 0;
 }
 
 .container {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    text-align: center;
-    width: 400px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+background: white;
+padding: 30px;
+border-radius: 12px;
+text-align: center;
+width: 800px;
+max-width: 95%;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 h1 {
-    margin-top: 0;
+margin-top: 0;
+margin-bottom: 30px;
+}
+
+h2 {
+margin-bottom: 25px;
 }
 
 input {
-    width: 90%;
-    padding: 12px;
-    margin-top: 15px;
-    font-size: 16px;
+width: 90%;
+padding: 12px;
+margin-top: 15px;
+font-size: 16px;
 }
 
 button {
-    margin-top: 15px;
-    padding: 12px 24px;
-    font-size: 16px;
-    cursor: pointer;
+margin-top: 15px;
+padding: 12px 24px;
+font-size: 16px;
+cursor: pointer;
 }
 
 #message {
-    margin-top: 20px;
-    font-weight: bold;
-}
-
-#wordCloud {
-    margin-top: 30px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-    align-items: center;
-}
-
-.word-item {
-    font-weight: bold;
-    padding: 6px;
-}
-
-.resultsArea {
-    margin-top: 30px;
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-#wordStats {
-    min-width: 120px;
-    text-align: left;
-    font-size: 14px;
-}
-
-.stat-row {
-    margin-bottom: 8px;
+margin-top: 20px;
+font-weight: bold;
 }
 
 #totalReactions {
-    font-weight: bold;
-    margin-top: 10px;
+font-weight: bold;
+font-size: 22px;
+margin-bottom: 10px;
 }
 
 #unlockText {
-    color: #666;
-    margin-bottom: 20px;
+color: #666;
+font-size: 18px;
+margin-bottom: 25px;
 }
 
 .resultsArea {
-    margin-top: 30px;
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-    align-items: flex-start;
+margin-top: 30px;
+display: flex;
+justify-content: center;
+align-items: flex-start;
+gap: 50px;
+flex-wrap: wrap;
+}
+
+#wordCloud {
+flex: 1;
+min-width: 300px;
+
+```
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+gap: 15px;
+```
+
+}
+
+.word-item {
+font-weight: bold;
+padding: 6px;
+transition: transform 0.2s ease;
+}
+
+.word-item:hover {
+transform: scale(1.1);
 }
 
 #wordStats {
-    min-width: 120px;
-    text-align: left;
-    font-size: 14px;
+min-width: 220px;
+font-size: 16px;
 }
 
 .stat-row {
-    margin-bottom: 8px;
+display: grid;
+grid-template-columns: 60px 1fr;
+align-items: center;
+gap: 12px;
+margin-bottom: 10px;
 }
 
-.stat-row {
-    margin-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
+.word-count {
+text-align: center;
+direction: ltr;
+unicode-bidi: isolate;
+font-weight: bold;
 }
 
 .word-name {
-    direction: auto;
+text-align: center;
+direction: auto;
+unicode-bidi: isolate;
+}
+
+#answerBox {
+margin-top: 20px;
 }
