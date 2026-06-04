@@ -187,3 +187,4 @@ onSnapshot(wordsRef, (snapshot) => {
 
 setUnlockState();
 applyLanguage();
+applyLanguage(0);
