@@ -13,19 +13,24 @@
 
         <h2>Global Warming</h2>
 
-        <input
-            type="text"
-            id="wordInput"
-            placeholder="Enter your first thought..."
-        >
-
-        <button id="submitBtn">
-            Submit
-        </button>
-
+        <div id="answerBox">
+            <input
+                type="text"
+                id="wordInput"
+                placeholder="Enter your first thought..."
+            >
+        
+            <button id="submitBtn">
+                Submit
+            </button>
+        </div>
+        
         <div id="message"></div>
-        <div id="wordCloud"></div>
-    </div>
+        
+        <div class="resultsArea">
+            <div id="wordCloud"></div>
+            <div id="wordStats"></div>
+        </div>
 
     <script type="module" src="script.js"></script>
 
