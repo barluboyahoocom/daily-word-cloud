@@ -1,4 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  increment,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCICTIdyskpbyUkeEyxBEmKUbC4fh1fhA8",
@@ -10,5 +19,45 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-console.log("Firebase Connected!");
+const submitBtn = document.getElementById("submitBtn");
+const wordInput = document.getElementById("wordInput");
+const message = document.getElementById("message");
+
+const today = new Date().toISOString().slice(0, 10);
+
+submitBtn.addEventListener("click", async () => {
+  const word = wordInput.value.trim().toLowerCase();
+
+  if (!word) {
+    message.innerText = "Please enter a word";
+    return;
+  }
+
+  const wordRef = doc(db, "daily_words", today, "words", word);
+
+  try {
+    const wordSnap = await getDoc(wordRef);
+
+    if (wordSnap.exists()) {
+      await updateDoc(wordRef, {
+        count: increment(1),
+        updatedAt: serverTimestamp()
+      });
+    } else {
+      await setDoc(wordRef, {
+        word: word,
+        count: 1,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+    }
+
+    message.innerText = `Saved: ${word}`;
+    wordInput.value = "";
+  } catch (error) {
+    console.error(error);
+    message.innerText = "Error saving word";
+  }
+});
