@@ -28,6 +28,9 @@ const today = new Date().toISOString().slice(0, 10);
 let currentLanguage = localStorage.getItem("language") || "en";
 let hasAnswered = localStorage.getItem(`answered-${today}`) === "true";
 
+let currentQuestionHe = "";
+let currentQuestionEn = "";
+
 const submitBtn = document.getElementById("submitBtn");
 const wordInput = document.getElementById("wordInput");
 const message = document.getElementById("message");
@@ -41,6 +44,7 @@ const langEn = document.getElementById("langEn");
 const langHe = document.getElementById("langHe");
 const mainTitle = document.getElementById("mainTitle");
 const questionTitle = document.getElementById("questionTitle");
+const dailyTopicLabel = document.getElementById("dailyTopicLabel");
 
 function setUnlockState() {
   if (hasAnswered) {
@@ -53,12 +57,15 @@ function setUnlockState() {
 }
 
 function applyLanguage(total = null) {
+  questionTitle.innerText =
+    currentLanguage === "he" ? currentQuestionHe : currentQuestionEn;
+
   if (currentLanguage === "he") {
     document.documentElement.lang = "he";
     document.body.dir = "rtl";
 
     mainTitle.innerText = "ענן מילים יומי";
-    questionTitle.innerText = "התחממות גלובלית";
+    dailyTopicLabel.innerText = "הנושא היומי: ";
     unlockText.innerText = hasAnswered ? "התרשים נפתח" : "תגיב כדי לפתוח את התרשים";
     wordInput.placeholder = "כתוב את המחשבה הראשונה שלך...";
     submitBtn.innerText = "שלח";
@@ -72,7 +79,7 @@ function applyLanguage(total = null) {
     document.body.dir = "ltr";
 
     mainTitle.innerText = "Daily Word Cloud";
-    questionTitle.innerText = "Global Warming";
+    dailyTopicLabel.innerText = "Today's Topic: ";
     unlockText.innerText = hasAnswered ? "Chart unlocked" : "React to unlock the chart";
     wordInput.placeholder = "Enter your first thought...";
     submitBtn.innerText = "Submit";
@@ -82,6 +89,22 @@ function applyLanguage(total = null) {
       totalReactions.innerText = `Today people already reacted: ${total}`;
     }
   }
+}
+
+async function loadQuestion() {
+  const questionRef = doc(db, "daily_questions", today);
+  const questionSnap = await getDoc(questionRef);
+
+  if (questionSnap.exists()) {
+    const data = questionSnap.data();
+    currentQuestionHe = data.question_he;
+    currentQuestionEn = data.question_en;
+  } else {
+    currentQuestionHe = "לא הוגדרה שאלה";
+    currentQuestionEn = "No question defined";
+  }
+
+  applyLanguage();
 }
 
 langEn.addEventListener("click", () => {
@@ -186,5 +209,4 @@ onSnapshot(wordsRef, (snapshot) => {
 });
 
 setUnlockState();
-applyLanguage();
-applyLanguage(0);
+loadQuestion();
