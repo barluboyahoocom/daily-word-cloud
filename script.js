@@ -23,6 +23,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+const today = new Date().toISOString().slice(0, 10);
+
+let currentLanguage = localStorage.getItem("language") || "en";
+let hasAnswered = localStorage.getItem(`answered-${today}`) === "true";
+
 const submitBtn = document.getElementById("submitBtn");
 const wordInput = document.getElementById("wordInput");
 const message = document.getElementById("message");
@@ -37,9 +42,17 @@ const langHe = document.getElementById("langHe");
 const mainTitle = document.getElementById("mainTitle");
 const questionTitle = document.getElementById("questionTitle");
 
-let currentLanguage = localStorage.getItem("language") || "en";
+function setUnlockState() {
+  if (hasAnswered) {
+    answerBox.style.display = "none";
+    results.style.display = "block";
+  } else {
+    answerBox.style.display = "block";
+    results.style.display = "none";
+  }
+}
 
-function applyLanguage() {
+function applyLanguage(total = null) {
   if (currentLanguage === "he") {
     document.documentElement.lang = "he";
     document.body.dir = "rtl";
@@ -49,6 +62,11 @@ function applyLanguage() {
     unlockText.innerText = hasAnswered ? "התרשים נפתח" : "תגיב כדי לפתוח את התרשים";
     wordInput.placeholder = "כתוב את המחשבה הראשונה שלך...";
     submitBtn.innerText = "שלח";
+    message.innerText = "";
+
+    if (total !== null) {
+      totalReactions.innerText = `היום הגיבו כבר: ${total} אנשים`;
+    }
   } else {
     document.documentElement.lang = "en";
     document.body.dir = "ltr";
@@ -58,23 +76,31 @@ function applyLanguage() {
     unlockText.innerText = hasAnswered ? "Chart unlocked" : "React to unlock the chart";
     wordInput.placeholder = "Enter your first thought...";
     submitBtn.innerText = "Submit";
+    message.innerText = "";
+
+    if (total !== null) {
+      totalReactions.innerText = `Today people already reacted: ${total}`;
+    }
   }
 }
 
-const today = new Date().toISOString().slice(0, 10);
-let hasAnswered = localStorage.getItem(`answered-${today}`) === "true";
+langEn.addEventListener("click", () => {
+  currentLanguage = "en";
+  localStorage.setItem("language", "en");
+  applyLanguage();
+});
 
-if (hasAnswered) {
-  answerBox.style.display = "none";
-  unlockText.innerText = "Chart unlocked";
-  results.style.display = "block";
-}
+langHe.addEventListener("click", () => {
+  currentLanguage = "he";
+  localStorage.setItem("language", "he");
+  applyLanguage();
+});
 
 submitBtn.addEventListener("click", async () => {
   const word = wordInput.value.trim().toLowerCase();
 
   if (!word) {
-    message.innerText = "Please enter a word";
+    message.innerText = currentLanguage === "he" ? "נא לכתוב מילה" : "Please enter a word";
     return;
   }
 
@@ -100,13 +126,12 @@ submitBtn.addEventListener("click", async () => {
     localStorage.setItem(`answered-${today}`, "true");
     hasAnswered = true;
 
-    answerBox.style.display = "none";
-    message.innerText = "";
-    unlockText.innerText = "Chart unlocked";
-    results.style.display = "block";
+    wordInput.value = "";
+    setUnlockState();
+    applyLanguage();
   } catch (error) {
     console.error(error);
-    message.innerText = "Error saving word";
+    message.innerText = currentLanguage === "he" ? "שגיאה בשמירת המילה" : "Error saving word";
   }
 });
 
@@ -130,7 +155,7 @@ onSnapshot(wordsRef, (snapshot) => {
     total += data.count || 0;
   });
 
-  totalReactions.innerText = `Today people already reacted: ${total}`;
+  applyLanguage(total);
 
   if (!hasAnswered) {
     return;
@@ -152,9 +177,13 @@ onSnapshot(wordsRef, (snapshot) => {
     const row = document.createElement("div");
     row.className = "stat-row";
     row.innerHTML = `
-        <span class="word-count">${data.count}</span>
-        <span class="word-name" dir="auto">${data.word}</span>
+      <span class="word-name" dir="auto">${data.word}</span>
+      <span class="word-count">${data.count}</span>
     `;
+
     wordStats.appendChild(row);
   });
 });
+
+setUnlockState();
+applyLanguage();
