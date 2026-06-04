@@ -71,3 +71,31 @@ button {
 .stat-row {
     margin-bottom: 8px;
 }
+
+#totalReactions {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#unlockText {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.resultsArea {
+    margin-top: 30px;
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#wordStats {
+    min-width: 120px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.stat-row {
+    margin-bottom: 8px;
+}
