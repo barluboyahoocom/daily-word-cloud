@@ -6,7 +6,9 @@ import {
   setDoc,
   updateDoc,
   increment,
-  serverTimestamp
+  serverTimestamp,
+  collection,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -24,6 +26,7 @@ const db = getFirestore(app);
 const submitBtn = document.getElementById("submitBtn");
 const wordInput = document.getElementById("wordInput");
 const message = document.getElementById("message");
+const wordCloud = document.getElementById("wordCloud");
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -60,4 +63,29 @@ submitBtn.addEventListener("click", async () => {
     console.error(error);
     message.innerText = "Error saving word";
   }
+});
+
+function randomColor() {
+  const colors = ["#e63946", "#457b9d", "#2a9d8f", "#f4a261", "#8338ec", "#ff006e"];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+const wordsRef = collection(db, "daily_words", today, "words");
+
+onSnapshot(wordsRef, (snapshot) => {
+  wordCloud.innerHTML = "";
+
+  snapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+
+    const span = document.createElement("span");
+    span.className = "word-item";
+    span.innerText = data.word;
+
+    const size = 16 + data.count * 8;
+    span.style.fontSize = `${size}px`;
+    span.style.color = randomColor();
+
+    wordCloud.appendChild(span);
+  });
 });
