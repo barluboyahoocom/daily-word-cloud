@@ -27,6 +27,8 @@ const submitBtn = document.getElementById("submitBtn");
 const wordInput = document.getElementById("wordInput");
 const message = document.getElementById("message");
 const wordCloud = document.getElementById("wordCloud");
+const wordStats = document.getElementById("wordStats");
+const answerBox = document.getElementById("answerBox");
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -57,8 +59,8 @@ submitBtn.addEventListener("click", async () => {
       });
     }
 
-    message.innerText = `Saved: ${word}`;
-    wordInput.value = "";
+    answerBox.style.display = "none";
+    message.innerText = "";
   } catch (error) {
     console.error(error);
     message.innerText = "Error saving word";
@@ -74,10 +76,17 @@ const wordsRef = collection(db, "daily_words", today, "words");
 
 onSnapshot(wordsRef, (snapshot) => {
   wordCloud.innerHTML = "";
+  wordStats.innerHTML = "";
+
+  const words = [];
 
   snapshot.forEach((docSnap) => {
-    const data = docSnap.data();
+    words.push(docSnap.data());
+  });
 
+  words.sort((a, b) => b.count - a.count);
+
+  words.forEach((data) => {
     const span = document.createElement("span");
     span.className = "word-item";
     span.innerText = data.word;
@@ -87,5 +96,10 @@ onSnapshot(wordsRef, (snapshot) => {
     span.style.color = randomColor();
 
     wordCloud.appendChild(span);
+
+    const row = document.createElement("div");
+    row.className = "stat-row";
+    row.innerText = `${data.word}: ${data.count}`;
+    wordStats.appendChild(row);
   });
 });
